@@ -155,9 +155,6 @@ class NoticiaDigital: public Noticia {
 
 int main() {
 
-    NoticiaPaper miPaper = NoticiaPaper("Titulo2", "02-06-2099", "Greyvin Moya", "./image02.jpeg");
-
-    NoticiaRadio miRadio = NoticiaRadio("Titulo3", "24-03-2050", "Andres Vargas", "./audio03.flac");
     // medias digitales para la NoticiaDigital
     mediaDitital media1 = {"Audio", "Mandy Osborn", "./au001.flac"};
     mediaDitital media2 = {"Foto", "Ramiro Daniles", "./ft001.jpeg"};
@@ -165,16 +162,16 @@ int main() {
     // se añaden a un vector
     vector<mediaDitital> vectorMedia = {media1, media2, media3};
 
-    NoticiaDigital miDigital = NoticiaDigital("Titulo4", "15-09-1998", "Anddy Alvarado", vectorMedia);
-
+    // la lista de noticias, utiliza punteros a Noticia porque sino no es accesible el método propio de las clases hijas
     vector<Noticia*> listaNoticias;
+    // se agregan al vector
     listaNoticias.push_back(new NoticiaPaper("Titulo2", "02-06-2099", "Greyvin Moya", "./image02.jpeg"));
     listaNoticias.push_back(new NoticiaRadio("Titulo3", "24-03-2050", "Andres Vargas", "./audio03.flac"));
     listaNoticias.push_back(new NoticiaDigital("Titulo4", "15-09-1998", "Anddy Alvarado", vectorMedia));
-
+    
+    // recorre las noticias del vector
     for (Noticia* n : listaNoticias) {
         cout << n->getInfo() << "\n----------------" << endl;
     }
-
     return 0;
 }
