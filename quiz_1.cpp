@@ -73,15 +73,19 @@ class NoticiaPaper: Noticia {
         }
 
         // Devuelve el nombre de la clase
-        virtual const string classname() { return "Noticia"; }
+        virtual const string classname() { return "NoticiaPaper"; }
 
-        // Método abstracto
-        virtual string getInfo() {
-            return "Soy " + classname() + "\nTitulo: " + getTitulo() + "\nFecha: " + getFecha() + "\nReportero: " + getReportero();
+        // Método abstracto implementado
+        virtual string getInfo()  {
+            return Noticia::getInfo() + "\nFoto: " + getFoto();
         }
 };
 
 int main() {
 
+    Noticia miNoticia = Noticia("Titulo1", "02-03-2022", "Ignacio Santos");
+    NoticiaPaper miPaper = NoticiaPaper("Titulo2", "02-06-2099", "Greyvin Moya", "./image.jpeg");
+    //cout << miNoticia.getInfo() << endl;
+    cout << miPaper.getInfo() << endl;
     return 0;
 }
