@@ -53,7 +53,7 @@ class Noticia {
         }
 };
 
-class NoticiaPaper: Noticia {
+class NoticiaPaper: public Noticia {
     // atributos privados
     private:
         string foto;
@@ -82,51 +82,7 @@ class NoticiaPaper: Noticia {
         }
 };
 
-/*
-typedef struct mediaDitital {
-    string video;
-    string audio;
-    string foto;
-} mediaDigitalPointer;
-*/
-
-/*
-    TODO: hacer bien la noticia digital
-*/
-class NoticiaDigital: Noticia {
-    // atributos privados
-    private:
-        vector<string> listaMedia;
-    public:
-        // SETTER
-        void setListaMedia(vector<string> pListaMedia) {
-            listaMedia = pListaMedia;
-        }
-
-        // GETTER
-        string getListaMedia() {
-            string res = "\n";
-            for (string i : listaMedia) {
-                res += (i + "\n");
-            }
-            return res;
-        }
-
-        // Constructor
-        NoticiaDigital(string pTitulo, string pFecha, string pReportero, vector<string> pListaMedia) : Noticia(pTitulo, pFecha, pReportero) {
-            setListaMedia(pListaMedia);
-        }
-
-        // Devuelve el nombre de la clase
-        virtual const string classname() { return "NoticiaPaper"; }
-
-        // Método abstracto implementado
-        virtual string getInfo()  {
-            return Noticia::getInfo() + "\nMedia: " + getListaMedia();
-        }
-};
-
-class NoticiaRadio: Noticia {
+class NoticiaRadio: public Noticia {
     // atributos privados
     private:
         string audio;
@@ -155,13 +111,70 @@ class NoticiaRadio: Noticia {
         }
 };
 
+// Struct para la noticia digital
+typedef struct mediaDitital {
+    string tipo;    // audio, video...
+    string autor;   // quien tomo la foto...
+    string url;     // ./source.zzz
+} mediaDigitalPointer;
+
+class NoticiaDigital: public Noticia {
+    // atributos privados
+    private:
+        vector<mediaDitital> listaMedia;
+    public:
+        // SETTER
+        void setListaMedia(vector<mediaDitital> pListaMedia) {
+            listaMedia = pListaMedia;
+        }
+
+        // GETTER
+        string getListaMedia() {
+            //string res = "\nMedia Ditital:";
+            string res = "\n";
+            for (mediaDitital i : listaMedia) {
+                res += ("\tTipo: "+ i.tipo + "\n\tAutor: " + i.autor + "\n\tUrl: " + i.url + "\n");
+            }
+            return res;
+        }
+
+        // Constructor
+        NoticiaDigital(string pTitulo, string pFecha, string pReportero, vector<mediaDitital> pListaMedia) : Noticia(pTitulo, pFecha, pReportero) {
+            setListaMedia(pListaMedia);
+        }
+
+        // Devuelve el nombre de la clase
+        virtual const string classname() { return "NoticiaDigital"; }
+
+        // Método abstracto implementado
+        virtual string getInfo()  {
+            return Noticia::getInfo() + "\nMedia Digital: " + getListaMedia();
+        }
+};
+
+
 int main() {
 
-    Noticia miNoticia = Noticia("Titulo1", "02-03-2022", "Ignacio Santos");
     NoticiaPaper miPaper = NoticiaPaper("Titulo2", "02-06-2099", "Greyvin Moya", "./image02.jpeg");
+
     NoticiaRadio miRadio = NoticiaRadio("Titulo3", "24-03-2050", "Andres Vargas", "./audio03.flac");
-    //cout << miNoticia.getInfo() << endl;
-    //cout << miPaper.getInfo() << endl;
-    cout << miRadio.getInfo() << endl;
+    // medias digitales para la NoticiaDigital
+    mediaDitital media1 = {"Audio", "Mandy Osborn", "./au001.flac"};
+    mediaDitital media2 = {"Foto", "Ramiro Daniles", "./ft001.jpeg"};
+    mediaDitital media3 = {"Video", "Denzel Crocker", "./mv001.mkv"};
+    // se añaden a un vector
+    vector<mediaDitital> vectorMedia = {media1, media2, media3};
+
+    NoticiaDigital miDigital = NoticiaDigital("Titulo4", "15-09-1998", "Anddy Alvarado", vectorMedia);
+
+    vector<Noticia*> listaNoticias;
+    listaNoticias.push_back(new NoticiaPaper("Titulo2", "02-06-2099", "Greyvin Moya", "./image02.jpeg"));
+    listaNoticias.push_back(new NoticiaRadio("Titulo3", "24-03-2050", "Andres Vargas", "./audio03.flac"));
+    listaNoticias.push_back(new NoticiaDigital("Titulo4", "15-09-1998", "Anddy Alvarado", vectorMedia));
+
+    for (Noticia* n : listaNoticias) {
+        cout << n->getInfo() << "\n----------------" << endl;
+    }
+
     return 0;
 }
